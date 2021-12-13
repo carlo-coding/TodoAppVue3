@@ -91,6 +91,12 @@ async function handlePlay (){
     })
 }
 
+function handleReset() {
+  asyncForEach(activities.value, async (act, index)=> {
+      activities.value[index].checked = false;
+      activities.value[index].seconds = act.minutes*60 + act.hours*60*60;
+    })
+}
 
 function playSound() {
   const audio = new Audio(tuturu);
@@ -124,7 +130,9 @@ function formatSeconds(sc) {
     <div v-for="activity in activities" :key="activity.id" class="activity">
       <input type="checkbox" v-model="activity.checked"/> 
       <p :style="activity.checked&&`text-decoration:line-through`">{{activity.title}}</p>
-      <span :class="activity.checked?`timer-done`:`timer`">{{formatSeconds(activity.seconds)}}</span> 
+      <span :class="activity.checked?`timer-done`:`timer`">
+        {{formatSeconds(activity.checked?0:activity.seconds)}}
+      </span> 
       <button @click="handleEdit(activity)"><img :src="EditIcon"/></button>
       <button @click="handleDelete(activity)"><img :src="DeleteIcon"/></button>
     </div>
